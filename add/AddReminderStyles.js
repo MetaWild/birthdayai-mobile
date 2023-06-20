@@ -1,0 +1,175 @@
+import { StyleSheet } from "react-native";
+
+const styles = StyleSheet.create({
+  body: {},
+  addReminderBody: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+    paddingBottom: 50,
+    backgroundColor: "#fafafa",
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  addReminderH1: {
+    flexGrow: 1,
+    textAlign: "center",
+    fontSize: 30,
+    color: "#fafafa",
+  },
+  description: {
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#dcdcdc",
+    marginTop: 10,
+    marginBottom: 30,
+  },
+  addReminderVenueH3: {
+    marginVertical: 10,
+    color: "#757575",
+  },
+  addReminderVenueH4: {
+    marginVertical: 10,
+    color: "#757575",
+  },
+  topPanel: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#3f51b5",
+    color: "#fff",
+  },
+  topPanelTitle: {
+    flexGrow: 1,
+    textAlign: "center",
+    color: "#fff",
+    margin: 0,
+    fontSize: 24,
+  },
+  leftIcon: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  rightIcons: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  textButtons: {
+    textDecorationLine: "none",
+    color: "#3f51b5",
+    backgroundColor: "#fafafa",
+    padding: 8,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+  },
+  input: {
+    width: "100%",
+    alignItems: "center",
+    padding: 10,
+    marginVertical: 10,
+    borderWidth: 0,
+    borderRadius: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    fontSize: 16,
+    backgroundColor: "#fafafa",
+  },
+
+  picker: {
+    width: "75%",
+    marginVertical: 10,
+    borderWidth: 0,
+    borderRadius: 4,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    fontSize: 16,
+    backgroundColor: "#fafafa",
+  },
+  sendButton: {
+    backgroundColor: "#3f51b5",
+    color: "#fff",
+    borderWidth: 0,
+    borderRadius: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 30,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkboxWrapper: {
+    flexDirection: "column",
+    alignItems: "flex-start",
+    marginVertical: 5,
+    marginTop: 10,
+  },
+  label: {
+    fontSize: 16,
+  },
+  import: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    borderRadius: 4,
+  },
+  importButton: {
+    backgroundColor: "#3f51b5",
+    fontSize: 16,
+    width: 90,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 0,
+    borderRadius: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  modalFormContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Darker background for better contrast
+    marginTop: -75,
+  },
+  modalFormModal: {
+    backgroundColor: "#fefefe",
+    padding: 25,
+    borderRadius: 10,
+    maxHeight: "80%", // Allow the modal to grow in height based on the content up to 80% of the screen
+    maxWidth: "90%",
+    width: 300,
+    alignSelf: "center",
+  },
+  userList: {
+    marginTop: 10,
+  },
+  userListItem: {
+    padding: 10,
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
+  },
+});
+
+export default styles;
