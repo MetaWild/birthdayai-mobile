@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, Modal } from "react-native";
 
 import PastImage from "./PastImage";
 import DataContext from "../data/data-context";
-import styles from "./ImageGenerationStyles"; // Assuming you have converted your CSS to RN styles
+import styles from "./ImageGenerationStyles";
 
 function PastGenerations({ onClose, isVisible }) {
   const dataCtx = useContext(DataContext);

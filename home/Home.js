@@ -1,14 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Text, View, Button, ScrollView, TouchableOpacity } from "react-native";
+import React, { useContext, useState } from "react";
+import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import Purchases from "react-native-purchases";
-import * as Calendar from "expo-calendar";
-import * as Contacts from "expo-contacts";
-import GearFill from "react-native-bootstrap-icons/icons/gear-fill";
-import PlusLg from "react-native-bootstrap-icons/icons/plus-lg";
 
 import UpgradePopup from "../upgrade/UpgradePopup";
 import ModalPopup from "../modal/ModalPopup";
@@ -26,19 +22,17 @@ function calculateDiffDays(birthday) {
   let nextBirthday = new Date(year, month - 1, day);
 
   let diffDays;
-  // If today is the birthday
   if (
     now.getMonth() === nextBirthday.getMonth() &&
     now.getDate() === nextBirthday.getDate()
   ) {
     diffDays = 0;
   } else {
-    // If the birthday has already passed this year, set to next year
     if (now > nextBirthday) {
       nextBirthday.setFullYear(year + 1);
     }
 
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const oneDay = 24 * 60 * 60 * 1000;
     diffDays = Math.floor(Math.abs((now - nextBirthday) / oneDay)) + 1;
   }
 
@@ -51,89 +45,12 @@ export default function Home() {
   const dataCtx = useContext(DataContext);
   const user = dataCtx.user;
   const userProfile = dataCtx.userProfile;
-  const sessionId = dataCtx.sessionId;
-  const setSessionId = dataCtx.setSessionId;
   const setUserProfile = dataCtx.setUserProfile;
 
-  // Add the showUpgradePopup state variable
   const [showUpgradePopup, setShowUpgradePopup] = useState(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const navigation = useNavigation();
-
-  /*useEffect(() => {
-    (async () => {
-      const { status } = await Contacts.requestPermissionsAsync();
-      if (status === "granted") {
-        const { data } = await Contacts.getContactsAsync({
-          fields: [Contacts.Fields.Birthday], // Add birthday field here if supported
-        });
-
-        if (data.length > 0) {
-          const contactsWithBirthdays = data.map((contact) => {
-            return {
-              name: contact.name,
-              birthday: contact.birthday, // This line may need to be changed depending on API support
-            };
-          });
-          console.log(contactsWithBirthdays);
-        }
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const { status } = await Calendar.requestCalendarPermissionsAsync();
-      if (status === "granted") {
-        const calendars = await Calendar.getCalendarsAsync(
-          Calendar.EntityTypes.EVENT
-        );
-
-        const birthdayCalendars = calendars.filter((calendar) =>
-          calendar.title.toLowerCase().includes("birthday")
-        );
-
-        if (birthdayCalendars.length > 0) {
-          const birthdayEvents = [];
-          for (const calendar of birthdayCalendars) {
-            const events = await Calendar.getEventsAsync(
-              [calendar.id],
-              new Date("1970-01-01T00:00:00.000Z"),
-              new Date("2099-12-31T00:00:00.000Z")
-            );
-            const birthdays = events.filter((event) =>
-              event.title.toLowerCase().includes("birthday")
-            );
-            birthdayEvents.push(...birthdays);
-          }
-
-          const birthdayData = birthdayEvents.map((event) => {
-            return {
-              title: event.title,
-              startDate: event.startDate,
-              endDate: event.endDate,
-            };
-          });
-          console.log(birthdayData);
-        }
-      }
-    })();
-  }, []);*/
-
-  /*useEffect(() => {
-    // Check to see if this is a redirect back from Checkout
-    const urlParams = new URLSearchParams(window.location.search);
-
-    if (urlParams.get("success")) {
-      setSuccess(true);
-      setSessionId(urlParams.get("session_id"));
-    }
-
-    if (urlParams.get("canceled")) {
-      setFailure(true);
-    }
-  }, [sessionId]);*/
 
   const sortedReminders = [...userProfile.reminders].sort((a, b) => {
     const aDiffDays = calculateDiffDays(a.date);
@@ -142,7 +59,6 @@ export default function Home() {
     return aDiffDays - bDiffDays;
   });
 
-  // These functions will be used to toggle the UpgradePopup and SuccessModal
   const showPopup = () => setShowUpgradePopup(true);
   const closePopup = () => setShowUpgradePopup(false);
   const showSuccessModal = () => setIsSuccessModalOpen(true);
@@ -174,7 +90,6 @@ export default function Home() {
         isVisible={showUpgradePopup}
       />
       <View style={styles.topPanel}>
-        {/* Settings button */}
         <View style={styles.leftIcon}>
           <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
             <FontAwesome name="gear" size={30} color="white" />
@@ -193,9 +108,8 @@ export default function Home() {
           <TouchableOpacity
             onPress={async () => {
               const purchaserInfo = await Purchases.getCustomerInfo();
-              let isPremium = false; // Default to false
+              let isPremium = false;
 
-              // Check if 'premium' exists in 'entitlements.active'
               if (purchaserInfo.entitlements?.active?.premium) {
                 isPremium = true;
               }

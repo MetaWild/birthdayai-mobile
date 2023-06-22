@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
+import * as MediaLibrary from "expo-media-library";
+import * as FileSystem from "expo-file-system";
+import { Asset } from "expo-asset";
 
 import ModalPopup from "../modal/ModalPopup";
 import UpgradePopup from "../upgrade/UpgradePopup";
@@ -36,6 +39,7 @@ function ImageGeneration() {
   const types = ["Birthday", "Anniversary", "Holiday"];
   const dataCtx = useContext(DataContext);
   const userProfile = dataCtx.userProfile;
+  const addToCardCount = dataCtx.addToCardCount;
   const navigation = useNavigation();
 
   const openUpgradePopup = () => {
@@ -62,10 +66,8 @@ function ImageGeneration() {
     setIsLoading(false);
   };
 
-  // This function will be used to show the SuccessModal
   const showSuccessModal = () => setIsSuccessModalOpen(true);
 
-  // This function will be used to hide the SuccessModal
   const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
   const openModal = (title, content, booleanButton = false, home = false) => {
@@ -111,6 +113,12 @@ function ImageGeneration() {
           true,
           false
         );
+      } else if (userProfile?.monthlyCardCount >= 15) {
+        closeLoadingModal();
+        openModal(
+          "Monthly Limit Reached",
+          "You have reached your monthly limit of 15 cards. Your limit will reset on the first of the month."
+        );
       } else {
         const newCard = {
           id: uuidv4(),
@@ -123,7 +131,7 @@ function ImageGeneration() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${dataCtx.user.accessToken}`, // Assuming you have user token in your context
+            Authorization: `Bearer ${dataCtx.user.accessToken}`,
           },
           body: JSON.stringify(newCard),
         };
@@ -141,92 +149,50 @@ function ImageGeneration() {
           const data = await response.json();
           dataCtx.addCard(data.card);
 
+          addToCardCount();
+
           closeLoadingModal();
-
-          // Assuming data.card.link is a base64 encoded string
-          /*const base64Image = data.card.link;
-
-          console.log(base64Image);
-
-          // Create a storage reference
-          const profileImageRef = ref(
-            storage,
-            `userImages/${dataCtx.user.uid}/${data.card.id}.jpg`
-          );
-
-          // Upload the base64 string to Firebase Storage
-          await uploadString(profileImageRef, base64Image, "base64");
-
-          // Get the download URL
-          const photoUrl = await getDownloadURL(profileImageRef);
-
-          console.log(photoUrl);
-
-          const responseImage = await fetch(data.card.link);
-          const photoBlob = await responseImage.blob();
-
-          const profileImageRef = ref(
-            storage,
-            `userImages/${dataCtx.user.uid}/${data.card.id}.jpg`
-          );
-
-          await uploadBytes(profileImageRef, photoBlob);
-          const photoUrl = await getDownloadURL(profileImageRef);*/
 
           setImageLink(data.card.link);
 
           openModal("Card Generated", "Your card has been generated.");
-
-          /*const requestOptionsLink = {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${dataCtx.user.accessToken}`, // Assuming you have user token in your context
-            },
-            body: JSON.stringify({
-              id: data.card.id,
-              name: data.card.name,
-              type: data.card.type,
-              link: photoUrl,
-            }),
-          };
-
-          const responseLink = await fetch(
-            `${process.env.REACT_APP_backendUrl}/api/users/${dataCtx.user.uid}/cards/${data.card.id}`,
-            requestOptionsLink
-          );
-
-          if (!responseLink.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          const dataLink = await responseLink.json();
-          dataCtx.editCard(dataLink.card);*/
-        } catch (error) {
-          console.error(
-            "There has been a problem with your fetch operation:",
-            error
-          );
-        }
+        } catch (error) {}
       }
     }
   }
 
-  const onLongPress = async () => {
+  const onLongPress = async (local = false) => {
     try {
-      const result = await Share.share({
-        url: imageLink,
-        title: "Share this image",
-      });
+      let localUri;
+      if (!local) {
+        const { uri } = await FileSystem.downloadAsync(
+          imageLink,
+          FileSystem.cacheDirectory + "image.jpg"
+        );
+        localUri = uri;
+      } else {
+        const asset = Asset.fromModule(require("../assets/AICard.jpeg"));
 
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // Shared with activity type of result.activityType
-        } else {
-          // Shared
+        await asset.downloadAsync();
+
+        localUri = FileSystem.cacheDirectory + "AICard.jpeg";
+        await FileSystem.copyAsync({
+          from: asset.localUri,
+          to: localUri,
+        });
+      }
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status === "granted") {
+        const result = await Share.share({
+          url: localUri,
+          title: "Share this image",
+        });
+
+        if (result.action === Share.sharedAction) {
+          alert("Image successfully shared!");
         }
-      } else if (result.action === Share.dismissedAction) {
-        // Dismissed
+      } else {
+        setIsSettingsModalOpen(true);
       }
     } catch (error) {
       alert(error.message);
@@ -308,17 +274,19 @@ function ImageGeneration() {
         )}
         <View style={styles.imagePreview}>
           {imageLink ? (
-            <TouchableOpacity onLongPress={onLongPress}>
+            <TouchableOpacity onLongPress={() => onLongPress(false)}>
               <Image
                 source={{ uri: imageLink }}
                 style={styles.imagePreviewImage}
               />
             </TouchableOpacity>
           ) : (
-            <Image
-              source={require("../assets/AICard.jpeg")}
-              style={styles.imagePreviewImage}
-            />
+            <TouchableOpacity onLongPress={() => onLongPress(true)}>
+              <Image
+                source={require("../assets/AICard.jpeg")}
+                style={styles.imagePreviewImage}
+              />
+            </TouchableOpacity>
           )}
         </View>
         <TouchableOpacity

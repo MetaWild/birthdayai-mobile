@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import LoginPage from "./login/LoginPage";
 import PhoneAuth from "./phone/PhoneAuth";
 import Home from "./home/Home";
 import AddReminder from "./add/AddReminder";
@@ -19,7 +18,6 @@ function App() {
   const isAuthChecked = dataCtx.isAuthChecked;
   const isDataFetched = dataCtx.isDataFetched;
 
-  // If auth is not checked yet, return null or a loading spinner
   if (!isAuthChecked) return null;
 
   return (

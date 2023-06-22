@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  body: {},
   addReminderBody: {
     flex: 1,
     alignItems: "center",
@@ -18,12 +17,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
   },
-  addReminderH1: {
-    flexGrow: 1,
-    textAlign: "center",
-    fontSize: 30,
-    color: "#fafafa",
-  },
   description: {
     padding: 10,
     borderRadius: 5,
@@ -31,14 +24,6 @@ const styles = StyleSheet.create({
     borderColor: "#dcdcdc",
     marginTop: 10,
     marginBottom: 30,
-  },
-  addReminderVenueH3: {
-    margin: 10,
-    color: "#757575",
-  },
-  addReminderVenueH4: {
-    margin: 10,
-    color: "#757575",
   },
   topPanel: {
     flexDirection: "row",
@@ -122,9 +107,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     marginVertical: 5,
     marginTop: 10,
-  },
-  checkbox: {
-    marginRight: 5,
   },
   checkboxLabel: {
     marginRight: 5,

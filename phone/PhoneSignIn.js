@@ -41,7 +41,6 @@ export default function PhoneSignIn({ onPhoneNumberSubmit }) {
 
     cleaned = formatted.replace(/\D/g, "");
 
-    // Check if the phone number is valid (10 digits long) and update the validPhoneNumber state
     setValidPhoneNumber(cleaned.length === 10);
   };
 

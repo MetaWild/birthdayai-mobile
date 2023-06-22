@@ -6,7 +6,7 @@ import {
   Modal,
   ActivityIndicator,
 } from "react-native";
-import styles from "./LoadingModalStyles"; // import the styles you created
+import styles from "./LoadingModalStyles";
 
 class LoadingModal extends React.Component {
   render() {

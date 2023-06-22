@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TouchableOpacity, Button, Alert } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import XLg from "react-native-bootstrap-icons/icons/x-lg";
 import Pencil from "react-native-bootstrap-icons/icons/pencil";
-import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import DeleteReminder from "../delete/DeleteReminder";
@@ -38,19 +38,17 @@ function Anniversary(props) {
   let nextBirthday = new Date(year, month - 1, day);
 
   let diffDays;
-  // If today is the birthday
   if (
     now.getMonth() === nextBirthday.getMonth() &&
     now.getDate() === nextBirthday.getDate()
   ) {
     diffDays = 0;
   } else {
-    // If the birthday has already passed this year, set to next year
     if (now > nextBirthday) {
       nextBirthday.setFullYear(year + 1);
     }
 
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const oneDay = 24 * 60 * 60 * 1000;
     diffDays = Math.floor(Math.abs((now - nextBirthday) / oneDay)) + 1;
   }
   let daysString = "days left";
@@ -65,7 +63,7 @@ function Anniversary(props) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${dataCtx.user.accessToken}`, // Assuming you have user token in your context
+        Authorization: `Bearer ${dataCtx.user.accessToken}`,
       },
     };
 
@@ -83,12 +81,7 @@ function Anniversary(props) {
         dataCtx.deleteReminder(props.item.id);
         openModal();
       })
-      .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
-      });
+      .catch((error) => {});
   };
 
   return (
@@ -120,7 +113,7 @@ function Anniversary(props) {
           </TouchableOpacity>
         </View>
         <View style={styles.svgAndBirthday}>
-          <AntDesign name="heart" size={35} color="#3f51b5" />
+          <FontAwesome5 name="heart" size={32} color="#3f51b5" />
           <Text style={styles.aiBirthday}>{props.item.date}</Text>
         </View>
         <View style={styles.leftContent}>

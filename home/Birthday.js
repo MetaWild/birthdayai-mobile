@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import XLg from "react-native-bootstrap-icons/icons/x-lg";
 import Pencil from "react-native-bootstrap-icons/icons/pencil";
@@ -38,19 +38,17 @@ function Birthday(props) {
   let nextBirthday = new Date(year, month - 1, day);
 
   let diffDays;
-  // If today is the birthday
   if (
     now.getMonth() === nextBirthday.getMonth() &&
     now.getDate() === nextBirthday.getDate()
   ) {
     diffDays = 0;
   } else {
-    // If the birthday has already passed this year, set to next year
     if (now > nextBirthday) {
       nextBirthday.setFullYear(year + 1);
     }
 
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const oneDay = 24 * 60 * 60 * 1000;
     diffDays = Math.floor(Math.abs((now - nextBirthday) / oneDay)) + 1;
   }
   let daysString = "days left";
@@ -65,7 +63,7 @@ function Birthday(props) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${dataCtx.user.accessToken}`, // Assuming you have user token in your context
+        Authorization: `Bearer ${dataCtx.user.accessToken}`,
       },
     };
 
@@ -83,12 +81,7 @@ function Birthday(props) {
         dataCtx.deleteReminder(props.item.id);
         openModal();
       })
-      .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
-      });
+      .catch((error) => {});
   };
 
   return (

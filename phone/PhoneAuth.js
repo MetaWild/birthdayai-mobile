@@ -1,16 +1,11 @@
 import { useRef, useState, useContext } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { View, Text, Image } from "react-native";
+import { View, Image } from "react-native";
 import { Card } from "react-native-paper";
 
 import PhoneSignIn from "./PhoneSignIn";
 import VerifyPhone from "./VerifyPhone";
 import { auth, app } from "../firebase/firebaseConfig";
-import {
-  signInWithPhoneNumber,
-  PhoneAuthProvider,
-  signInWithCredential,
-} from "@firebase/auth";
+import { signInWithPhoneNumber } from "@firebase/auth";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import ModalPopup from "../modal/ModalPopup";
 import LoadingModal from "../loading/LoadingModal";
@@ -19,11 +14,9 @@ import styles from "../login/LoginStyles";
 
 export default function PhoneAuth() {
   const [isVerifying, setIsVerifying] = useState(false);
-  const [verificationCode, setVerificationCode] = useState(null);
   const [confirmationResult, setConfirmationResult] = useState(null);
   const recaptchaVerifier = useRef(null);
   const [verificationWrong, setVerificationWrong] = useState(false);
-  const navigation = useNavigation();
   const { loading, setLoading } = useContext(DataContext);
 
   const loginWithPhoneNumber = async (phoneNumber) => {
@@ -40,38 +33,17 @@ export default function PhoneAuth() {
     if (confirmationResult) {
       try {
         const userCredential = await confirmationResult.confirm(code);
-        /*console.log("LOGGED IN HOORAY!", userCredential.user.uid);
-      if (userCredential) {
-        await fetch(`https://birthdayai.herokuapp.com/api/users/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userCredential._tokenResponse.idToken}`,
-          },
-          body: JSON.stringify({
-            id: userCredential.user.uid,
-            phoneNumber: userCredential.user.phoneNumber,
-          }),
-        }).then((response) => response.json()).then((data) => {
-            let userProfile = { ...data.user };
-            userProfile.reminders = Object.values(userProfile.reminders);
-            setUserProfile(userProfile);
-          }).catch((error) => {
-            console.error("Error:", error);
-          });
-        navigation.navigate("Home");
-      }*/
+        setLoading(true);
       } catch (error) {
-        console.error("Error confirming code: ", error);
-        setVerificationWrong(true); // Set verificationWrong state to true
+        setVerificationWrong(true);
       }
     } else {
-      console.error("No confirmation result to verify code with");
     }
   };
 
   return isVerifying ? (
     <View>
+      <LoadingModal isVisible={loading} onClose={() => setLoading(false)} />
       <ModalPopup
         isVisible={verificationWrong}
         onClose={() => setVerificationWrong(false)}
@@ -81,9 +53,8 @@ export default function PhoneAuth() {
       <Card style={styles.loginContainer}>
         <Image
           style={styles.loginLogo}
-          source={require("../assets/icon.png")}
+          source={require("../assets/BirthdayAIBanner.jpg")}
         />
-        <Text style={styles.welcomeText}>Welcome!</Text>
       </Card>
       <VerifyPhone
         onVerify={verifyCode}
@@ -99,9 +70,8 @@ export default function PhoneAuth() {
       <Card style={styles.loginContainer}>
         <Image
           style={styles.loginLogo}
-          source={require("../assets/icon.png")}
+          source={require("../assets/BirthdayAIBanner.jpg")}
         />
-        <Text style={styles.welcomeText}>Welcome!</Text>
       </Card>
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}

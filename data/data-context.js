@@ -5,10 +5,8 @@ const DataContext = createContext({
   setUser: () => {},
   userProfile: null,
   setUserProfile: () => {},
-  handleLogout: () => {},
   addReminder: () => {},
   isAuthChecked: null,
-  sessionId: null,
   setSessionId: () => {},
   deleteReminder: () => {},
   editReminder: () => {},
@@ -19,6 +17,7 @@ const DataContext = createContext({
   editCard: () => {},
   loading: null,
   setLoading: () => {},
+  addToCardCount: () => {},
 });
 
 export default DataContext;

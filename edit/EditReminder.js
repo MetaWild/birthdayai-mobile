@@ -13,7 +13,7 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import ModalPopup from "../modal/ModalPopup";
-import styles from "./EditReminderStyles"; // assuming you moved styles to a separate file
+import styles from "./EditReminderStyles";
 import { useNavigation } from "@react-navigation/native";
 import DataContext from "../data/data-context";
 
@@ -226,7 +226,7 @@ function EditReminder({ route }) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${dataCtx.user.accessToken}`, // Assuming you have user token in your context
+          Authorization: `Bearer ${dataCtx.user.accessToken}`,
         },
         body: JSON.stringify(newReminder),
       };
@@ -250,12 +250,7 @@ function EditReminder({ route }) {
             true
           );
         })
-        .catch((error) => {
-          console.error(
-            "There has been a problem with your fetch operation:",
-            error
-          );
-        });
+        .catch((error) => {});
     }
   }
   return (
@@ -385,7 +380,7 @@ function EditReminder({ route }) {
             <>
               <Text style={styles.label}>Brief Description of Individual:</Text>
               <TextInput
-                style={styles.input}
+                style={styles.description}
                 onChangeText={(text) => setDescription(text)}
                 value={description}
                 placeholder="To help AI make better gift suggestions"

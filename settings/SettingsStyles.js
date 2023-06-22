@@ -46,10 +46,6 @@ export default StyleSheet.create({
     shadowRadius: 5,
     marginBottom: 10,
   },
-  settingIcon: {
-    width: 30,
-    height: 30,
-  },
   settingTitle: {
     flexGrow: 1,
     marginLeft: 15,

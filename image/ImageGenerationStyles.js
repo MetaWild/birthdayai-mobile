@@ -26,7 +26,7 @@ export default StyleSheet.create({
   addReminderH1: {
     flexGrow: 1,
     textAlign: "center",
-    fontSize: 24, // Roughly equivalent to 1.5em
+    fontSize: 24,
     color: "#fafafa",
   },
   leftIcon: {
@@ -45,21 +45,6 @@ export default StyleSheet.create({
     paddingLeft: 7,
     paddingRight: 7,
     borderRadius: 5,
-  },
-  textInput: {
-    width: "100%",
-    padding: 10,
-    marginTop: 10,
-    marginBottom: 10,
-    borderWidth: 0,
-    borderRadius: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 1,
-    fontSize: 16,
-    backgroundColor: "#fafafa",
   },
   sendButton: {
     backgroundColor: "#3f51b5",
@@ -146,6 +131,8 @@ export default StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 20,
+    paddingHorizontal: 10,
+    paddingTop: 10,
   },
   card: {
     shadowColor: "#000",
@@ -155,12 +142,6 @@ export default StyleSheet.create({
     elevation: 1,
     borderRadius: 4,
     position: "relative",
-  },
-  cardImage: {
-    width: "100%",
-    height: undefined,
-    aspectRatio: 1,
-    resizeMode: "cover",
   },
   viewPastButton: {
     marginTop: 10,

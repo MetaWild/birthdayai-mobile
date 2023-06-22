@@ -47,16 +47,12 @@ const Settings = () => {
     setIsContactModalOpen(false);
   };
 
-  // This function will be used to show the SuccessModal
   const showSuccessModal = () => setIsSuccessModalOpen(true);
 
-  // This function will be used to hide the SuccessModal
   const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
-  // This function will be used to show the FeedbackSuccessModal
   const showFeedbackSuccessModal = () => setIsFeedbackSuccessModalOpen(true);
 
-  // This function will be used to hide the FeedbackSuccessModal
   const closeFeedbackSuccessModal = () => setIsFeedbackSuccessModalOpen(false);
 
   return (

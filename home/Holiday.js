@@ -1,10 +1,12 @@
 import React, { useState, useContext } from "react";
-import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import XLg from "react-native-bootstrap-icons/icons/x-lg";
 import Pencil from "react-native-bootstrap-icons/icons/pencil";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import DeleteReminder from "../delete/DeleteReminder";
+import ModalPopup from "../modal/ModalPopup";
 import DataContext from "../data/data-context";
 import styles from "./HomeStyles";
 
@@ -36,19 +38,17 @@ function Holiday(props) {
   let nextHoliday = new Date(year, month - 1, day);
 
   let diffDays;
-  // If today is the holiday
   if (
     now.getMonth() === nextHoliday.getMonth() &&
     now.getDate() === nextHoliday.getDate()
   ) {
     diffDays = 0;
   } else {
-    // If the holiday has already passed this year, set to next year
     if (now > nextHoliday) {
       nextHoliday.setFullYear(year + 1);
     }
 
-    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const oneDay = 24 * 60 * 60 * 1000;
     diffDays = Math.floor(Math.abs((now - nextHoliday) / oneDay)) + 1;
   }
   let daysString = "days left";
@@ -63,7 +63,7 @@ function Holiday(props) {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${dataCtx.user.accessToken}`, // Assuming you have user token in your context
+        Authorization: `Bearer ${dataCtx.user.accessToken}`,
       },
     };
 
@@ -81,12 +81,7 @@ function Holiday(props) {
         dataCtx.deleteReminder(props.item.id);
         openModal();
       })
-      .catch((error) => {
-        console.error(
-          "There has been a problem with your fetch operation:",
-          error
-        );
-      });
+      .catch((error) => {});
   };
 
   return (

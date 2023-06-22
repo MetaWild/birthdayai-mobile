@@ -4,10 +4,10 @@
     "slug": "birthdayaiapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/BirthdayAI.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/BirthdayAIBanner.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/BirthdayAIBanner.jpg",
         "backgroundColor": "#ffffff"
       },
       "package": "com.birthdayaiapp.BirthdayAI"

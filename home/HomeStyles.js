@@ -62,26 +62,6 @@ export default StyleSheet.create({
     fontSize: 12,
     color: "#757575",
   },
-  aiProfilePic: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-    backgroundColor: "black",
-  },
-  aiItemTitle: {
-    flex: 1,
-    fontWeight: "500",
-    color: "#3f51b5",
-  },
-  aiBuyButton: {
-    color: "#3f51b5",
-    backgroundColor: "#fafafa",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    marginRight: 10,
-  },
   upgradeButton: {
     color: "#3f51b5",
     backgroundColor: "#fafafa",
@@ -90,13 +70,6 @@ export default StyleSheet.create({
     borderRadius: 4,
     marginRight: 10,
     textDecorationLine: "none",
-  },
-
-  aiPrice: {
-    marginRight: 10,
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#3f51b5",
   },
   topPanel: {
     flexDirection: "row",

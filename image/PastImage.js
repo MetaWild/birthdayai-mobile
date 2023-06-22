@@ -2,17 +2,18 @@ import React, { useState, useContext } from "react";
 import { View, TouchableOpacity, Image, Share } from "react-native";
 import XLg from "react-native-bootstrap-icons/icons/x-lg";
 import * as FileSystem from "expo-file-system";
-//import * as MediaLibrary from "expo-media-library";
+import * as MediaLibrary from "expo-media-library";
 import ModalPopup from "../modal/ModalPopup";
 
 import DeleteReminder from "../delete/DeleteReminder";
 import DataContext from "../data/data-context";
-import styles from "./ImageGenerationStyles"; // Assuming you have converted your CSS to RN styles
+import styles from "./ImageGenerationStyles";
 
 function PastImage(props) {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const dataCtx = useContext(DataContext);
+  const addToCardCount = dataCtx.addToCardCount;
 
   const openDelete = () => {
     setIsDeleteOpen(true);
@@ -20,6 +21,10 @@ function PastImage(props) {
 
   const closeDelete = () => {
     setIsDeleteOpen(false);
+  };
+
+  const closeSettingsModal = () => {
+    setIsSettingsModalOpen(false);
   };
 
   function handleDelete() {
@@ -44,40 +49,42 @@ function PastImage(props) {
       .then((data) => {
         dataCtx.deleteCard(props.card.id);
       })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+      .catch((error) => {});
   }
 
-  /*const onLongPress = async () => {
+  const onLongPress = async () => {
     try {
-      // Download the image to the device's cache directory
       const { uri: localUri } = await FileSystem.downloadAsync(
         props.card.link,
         FileSystem.cacheDirectory + "image.jpg"
       );
 
-      // Request permission to access the media library
       const { status } = await MediaLibrary.requestPermissionsAsync();
       if (status === "granted") {
-        // Save the image to the media library
-        await MediaLibrary.saveToLibraryAsync(localUri);
-        alert("Image saved to photo library");
+        const result = await Share.share({
+          url: localUri,
+          title: "Share this image",
+        });
+
+        if (result.action === Share.sharedAction) {
+          alert("Image successfully shared!");
+          addToCardCount();
+        }
       } else {
         setIsSettingsModalOpen(true);
       }
     } catch (error) {
       alert(error.message);
     }
-  };*/
+  };
 
   return (
     <>
       <ModalPopup
-        isOpen={isSettingsModalOpen}
-        onClose={() => setIsSettingsModalOpen(false)}
+        isVisible={isSettingsModalOpen}
+        onClose={closeSettingsModal}
         title="Permission Denied"
-        content="Please enable access to the media library in your settings."
+        content="Please enable access to the media library in your settings to save or share photos."
         hasLinkToSettings={true}
       />
       <DeleteReminder

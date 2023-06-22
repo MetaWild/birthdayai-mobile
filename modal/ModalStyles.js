@@ -37,12 +37,4 @@ export default styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 5,
   },
-  submitButton: {
-    backgroundColor: "#3f51b5",
-    color: "white",
-    padding: 14,
-    marginTop: 8,
-    borderRadius: 4,
-    width: "100%",
-  },
 });

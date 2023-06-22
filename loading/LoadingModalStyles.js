@@ -43,17 +43,6 @@ const LoadingModalStyles = StyleSheet.create({
     fontWeight: "bold",
     padding: 5,
   },
-  loader: {
-    margin: 50,
-    borderWidth: 16,
-    borderColor: "#f3f3f3",
-    borderTopColor: "#3498db",
-    borderRadius: 50,
-    width: 120,
-    height: 120,
-    alignItems: "center",
-    justifyContent: "center",
-  },
 });
 
 export default LoadingModalStyles;

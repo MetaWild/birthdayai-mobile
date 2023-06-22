@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  body: {},
   addReminderBody: {
     flex: 1,
     alignItems: "center",
@@ -18,12 +17,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
   },
-  addReminderH1: {
-    flexGrow: 1,
-    textAlign: "center",
-    fontSize: 30,
-    color: "#fafafa",
-  },
   description: {
     padding: 10,
     borderRadius: 5,
@@ -31,14 +24,6 @@ const styles = StyleSheet.create({
     borderColor: "#dcdcdc",
     marginTop: 10,
     marginBottom: 30,
-  },
-  addReminderVenueH3: {
-    marginVertical: 10,
-    color: "#757575",
-  },
-  addReminderVenueH4: {
-    marginVertical: 10,
-    color: "#757575",
   },
   topPanel: {
     flexDirection: "row",
@@ -150,14 +135,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Darker background for better contrast
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     marginTop: -75,
   },
   modalFormModal: {
     backgroundColor: "#fefefe",
     padding: 25,
     borderRadius: 10,
-    maxHeight: "80%", // Allow the modal to grow in height based on the content up to 80% of the screen
+    maxHeight: "80%",
     maxWidth: "90%",
     width: 300,
     alignSelf: "center",

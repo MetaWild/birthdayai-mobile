@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Modal } from "react-native";
-import styles from "./DeleteReminderStyles"; // assuming styles file is in the same directory and named as 'styles.js'
+import styles from "./DeleteReminderStyles";
 
 const DeleteReminder = ({ isOpen, onConfirm, onCancel, isVisible }) => {
   if (!isOpen) {

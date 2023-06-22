@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
 import Purchases from "react-native-purchases";
 import { Platform } from "react-native";
@@ -16,7 +16,6 @@ function DataProvider(props) {
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
-  let [sessionId, setSessionId] = useState("");
   const [currentOffering, setCurrentOffering] = useState(null);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -51,9 +50,7 @@ function DataProvider(props) {
             setUser(currentUser);
             setIsAuthChecked(true);
           })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+          .catch((error) => {});
       } else {
         setIsAuthChecked(true);
         setUser(null);
@@ -62,7 +59,6 @@ function DataProvider(props) {
       }
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
@@ -70,16 +66,14 @@ function DataProvider(props) {
     const fetchData = async () => {
       try {
         const offerings = await Purchases.getOfferings();
-        console.log(offerings);
         if (
           offerings.current !== null &&
           offerings.current.availablePackages.length !== 0
         ) {
           setCurrentOffering(offerings.current);
           const purchaserInfo = await Purchases.getCustomerInfo();
-          let isPremium = false; // Default to false
+          let isPremium = false;
 
-          // Check if 'premium' exists in 'entitlements.active'
           if (purchaserInfo.entitlements?.active?.premium) {
             isPremium = true;
           }
@@ -106,20 +100,19 @@ function DataProvider(props) {
           }
           setIsDataFetched(true);
         }
-      } catch (e) {
-        console.error(e.message);
-      }
+      } catch (e) {}
     };
     if (user) {
       setLoading(true);
       Purchases.setDebugLogsEnabled(true);
-      console.log(Platform.OS);
       if (Platform.OS === "android") {
         Purchases.configure({ apiKey: APIKeys.google, appUserID: user.uid });
-        fetchData().catch(console.log);
+        fetchData().catch();
+        setLoading(false);
       } else {
         Purchases.configure({ apiKey: APIKeys.apple, appUserID: user.uid });
-        fetchData().catch(console.log);
+        fetchData().catch();
+        setLoading(false);
       }
     }
   }, [user]);
@@ -128,9 +121,8 @@ function DataProvider(props) {
     if (isDataFetched) {
       const removeListener = Purchases.addCustomerInfoUpdateListener(
         async (info) => {
-          let isPremium = false; // Default to false
+          let isPremium = false;
 
-          // Check if 'premium' exists in 'entitlements.active'
           if (info.entitlements?.active?.premium) {
             isPremium = true;
           }
@@ -162,18 +154,13 @@ function DataProvider(props) {
       setLoading(false);
       navigation.navigate("Home");
 
-      return removeListener; // Cleanup subscription on unmount
+      return removeListener;
     }
   }, [isDataFetched]);
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigation.navigate("Home");
-  };
-
   function addReminder(reminder) {
     const reminders = userProfile.reminders || [];
-    const newReminders = [reminders, reminder];
+    const newReminders = [...reminders, reminder];
     setUserProfile((prevState) => {
       return {
         ...prevState,
@@ -239,16 +226,24 @@ function DataProvider(props) {
     });
   }
 
+  function addToCardCount() {
+    setUserProfile((prevState) => {
+      return {
+        ...prevState,
+        monthlyCardCount: prevState.monthlyCardCount
+          ? prevState.monthlyCardCount + 1
+          : 1,
+      };
+    });
+  }
+
   const dataContext = {
     user: user,
     setUser: setUser,
     userProfile: userProfile,
     setUserProfile: setUserProfile,
-    handleLogout: handleLogout,
     addReminder: addReminder,
     isAuthChecked: isAuthChecked,
-    sessionId: sessionId,
-    setSessionId: setSessionId,
     deleteReminder: deleteReminder,
     editReminder: editReminder,
     currentOffering: currentOffering,
@@ -258,6 +253,7 @@ function DataProvider(props) {
     deleteCard: deleteCard,
     loading: loading,
     setLoading: setLoading,
+    addToCardCount: addToCardCount,
   };
 
   return (

@@ -10,7 +10,6 @@ import {
   Platform,
   Modal,
   Button,
-  ActionSheetIOS,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -18,7 +17,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import Papa from "papaparse";
 import { v4 as uuidv4 } from "uuid";
-import { Link, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import * as Calendar from "expo-calendar";
 import * as Contacts from "expo-contacts";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -140,16 +139,12 @@ function AddReminder() {
     setIsUpgradePopupOpen(false);
   };
 
-  // This function will be used to show the SuccessModal
   const showSuccessModal = () => setIsSuccessModalOpen(true);
 
-  // This function will be used to hide the SuccessModal
   const closeSuccessModal = () => setIsSuccessModalOpen(false);
 
-  // This function will be used to show the SettingsModal
   const showSettingsModal = () => setIsSettingsModalOpen(true);
 
-  // This function will be used to hide the SettingsModal
   const closeSettingsModal = () => setIsSettingsModalOpen(false);
 
   const openModal = (title, content, booleanButton = false, home = false) => {
@@ -243,7 +238,7 @@ function AddReminder() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${dataCtx.user.accessToken}`, // Assuming you have user token in your context
+            Authorization: `Bearer ${dataCtx.user.accessToken}`,
           },
           body: JSON.stringify(newReminder),
         };
@@ -268,10 +263,6 @@ function AddReminder() {
             );
           })
           .catch((error) => {
-            console.error(
-              "There has been a problem with your fetch operation:",
-              error
-            );
           });
       }
     }
@@ -286,9 +277,9 @@ function AddReminder() {
       );
       const allEvents = [];
 
-      const currentYear = new Date().getFullYear(); // Get the current year
-      const startDate = new Date(`${currentYear}-01-01T00:00:00.000Z`); // Start of current year
-      const endDate = new Date(`${currentYear}-12-31T23:59:59.999Z`); // End of current year
+      const currentYear = new Date().getFullYear();
+      const startDate = new Date(`${currentYear}-01-01T00:00:00.000Z`);
+      const endDate = new Date(`${currentYear}-12-31T23:59:59.999Z`);
 
       for (const calendar of calendars) {
         const events = await Calendar.getEventsAsync(
@@ -317,7 +308,7 @@ function AddReminder() {
     const { status } = await Contacts.requestPermissionsAsync();
     if (status === "granted") {
       const { data } = await Contacts.getContactsAsync({
-        fields: [Contacts.Fields.Birthday], // Add birthday field here if supported
+        fields: [Contacts.Fields.Birthday],
       });
 
       if (data.length > 0) {
@@ -325,7 +316,7 @@ function AddReminder() {
           .map((contact) => {
             return {
               name: contact.name,
-              birthday: contact.birthday, // This line may need to be changed depending on API support
+              birthday: contact.birthday,
             };
           })
           .filter((contact) => contact.birthday !== undefined);
@@ -339,21 +330,18 @@ function AddReminder() {
 
   async function handleImportCSV() {
     try {
-      // Pick a document
       const document = await DocumentPicker.getDocumentAsync({
-        type: "text/csv", // Only allows picking of CSV files
+        type: "text/csv",
       });
 
-      // Check if a document was picked and not cancelled
       if (document.type === "success") {
         const csvContent = await FileSystem.readAsStringAsync(document.uri);
         const results = Papa.parse(csvContent, {
-          header: true, // Indicate that the CSV file contains a header
-          dynamicTyping: true, // Convert strings to their native types
-          skipEmptyLines: true, // Skip empty lines
+          header: true,
+          dynamicTyping: true,
+          skipEmptyLines: true,
         });
 
-        // Check for errors during parsing
         if (results.errors.length > 0) {
           openModal(
             "CSV Error",
@@ -362,9 +350,7 @@ function AddReminder() {
           return;
         }
 
-        // Process data
         const processedData = results.data.map((row) => {
-          // Set default event type if not specified
           if (
             !row["Event Type"] ||
             (row["Event Type"] !== "Birthday" &&
@@ -375,12 +361,11 @@ function AddReminder() {
             row["Event Type"] = "Birthday";
           }
 
-          // Convert day, month, and year into a date object
           if (row["Day"] && row["Month"]) {
             if (row["Year"]) {
               row["Date"] = new Date(row["Year"], row["Month"] - 1, row["Day"]);
             } else {
-              row["Date"] = new Date(1970, row["Month"] - 1, row["Day"]); // Use 1970 as default year
+              row["Date"] = new Date(1970, row["Month"] - 1, row["Day"]);
             }
           }
 
@@ -402,7 +387,6 @@ function AddReminder() {
         openModal("Import Error", "There was an error importing your file.");
       }
     } catch (err) {
-      console.error(err);
     }
   }
 
@@ -444,8 +428,8 @@ function AddReminder() {
                     style={styles.userListItem}
                     onPress={() => {
                       setName(user.name);
-                      const { year, month, day } = user.birthday; // Destructure the birthday object
-                      setDate(new Date(year, month, day)); // Create a new Date object
+                      const { year, month, day } = user.birthday;
+                      setDate(new Date(year, month, day));
                       setIsContactsModalOpen(false);
                     }}
                   >
@@ -484,8 +468,8 @@ function AddReminder() {
                     key={index}
                     style={styles.userListItem}
                     onPress={() => {
-                      setName(user.name); // Destructure the birthday object
-                      setDate(new Date(Date.parse(user.date))); // Create a new Date object
+                      setName(user.name);
+                      setDate(new Date(Date.parse(user.date)));
                       setIsCalendarModalOpen(false);
                     }}
                   >
@@ -524,8 +508,8 @@ function AddReminder() {
                     key={index}
                     style={styles.userListItem}
                     onPress={() => {
-                      setName(user.name); // Destructure the birthday object
-                      setDate(new Date(Date.parse(user.date))); // Create a new Date object
+                      setName(user.name);
+                      setDate(new Date(Date.parse(user.date)));
                       setType(user.event);
                       setIsCsvModalOpen(false);
                     }}

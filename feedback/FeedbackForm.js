@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import DataContext from "../data/data-context";
-import styles from "./FeedbackFormStyles"; // make sure the path is correct
+import styles from "./FeedbackFormStyles";
 
 const FeedbackForm = ({ onClose, openModal, isVisible }) => {
   const [feedback, setFeedback] = useState("");
@@ -17,14 +17,12 @@ const FeedbackForm = ({ onClose, openModal, isVisible }) => {
   const dataCtx = useContext(DataContext);
 
   const handleFeedbackChange = (text) => {
-    // Set feedback only if the character count is below or equal to 500
     if (text.length <= 500) {
       setFeedback(text);
     }
   };
 
   const handleSubmit = async () => {
-    // Close the form after submitting feedback
     if (feedback.length >= 20) {
       await fetch(
         `https://birthdayai.herokuapp.com/api/users/${dataCtx.user.uid}/feedback`,
@@ -47,12 +45,7 @@ const FeedbackForm = ({ onClose, openModal, isVisible }) => {
           openModal();
           onClose();
         })
-        .catch((error) => {
-          console.error(
-            "There has been a problem with your fetch operation:",
-            error
-          );
-        });
+        .catch((error) => {});
     } else {
       Alert.alert("Please provide at least 20 characters.");
     }
