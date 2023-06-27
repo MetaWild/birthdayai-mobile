@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, TextInput, DefaultTheme } from "react-native-paper";
+import { Button, TextInput, DefaultTheme, Text } from "react-native-paper";
+import { Linking } from "react-native";
 
 export default function PhoneSignIn({ onPhoneNumberSubmit }) {
   const [phoneNumber, setPhoneNumber] = React.useState("");
@@ -44,6 +45,15 @@ export default function PhoneSignIn({ onPhoneNumberSubmit }) {
     setValidPhoneNumber(cleaned.length === 10);
   };
 
+  const handleOpenURL = (url) => {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+      }
+    });
+  };
+
   return (
     <>
       <TextInput
@@ -67,6 +77,27 @@ export default function PhoneSignIn({ onPhoneNumberSubmit }) {
       >
         Sign In
       </Button>
+      <Text style={{ margin: 20, textAlign: "center" }}>
+        By clicking Sign In you are consenting to the{" "}
+        <Text
+          style={{ color: "blue" }}
+          onPress={() =>
+            handleOpenURL(
+              "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+            )
+          }
+        >
+          Terms of Conditions
+        </Text>{" "}
+        and the{" "}
+        <Text
+          style={{ color: "blue" }}
+          onPress={() => handleOpenURL("https://birthdayaiapp.com/privacy")}
+        >
+          Privacy Policy
+        </Text>{" "}
+        of BirthdayAI
+      </Text>
     </>
   );
 }

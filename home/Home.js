@@ -94,7 +94,38 @@ export default function Home() {
           <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
             <FontAwesome name="gear" size={30} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Generate")}>
+          <TouchableOpacity
+            onPress={async () => {
+              const purchaserInfo = await Purchases.getCustomerInfo();
+              let isPremium = false;
+
+              if (purchaserInfo.entitlements?.active?.premium) {
+                isPremium = true;
+              }
+              if (userProfile && userProfile.subscription !== isPremium) {
+                setUserProfile((prevState) => {
+                  return {
+                    ...prevState,
+                    subscription: isPremium,
+                  };
+                });
+                await fetch(
+                  `https://birthdayai.herokuapp.com/api/users/${user.uid}/subscription`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${user.accessToken}`,
+                    },
+                    body: JSON.stringify({
+                      isSubscribed: isPremium,
+                    }),
+                  }
+                );
+              }
+              navigation.navigate("Generate");
+            }}
+          >
             <EvilIcons name="image" size={36} color="white" />
           </TouchableOpacity>
         </View>

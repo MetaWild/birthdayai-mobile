@@ -2,7 +2,7 @@
   "expo": {
     "name": "BirthdayAI",
     "slug": "birthdayaiapp",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -14,7 +14,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.birthdayaiapp.BirthdayAI"
+      "bundleIdentifier": "com.birthdayaiapp.BirthdayAI",
+      "buildNumber": "1.0.3"
     },
     "android": {
       "adaptiveIcon": {

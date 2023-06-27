@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Linking, Alert } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import Purchases from "react-native-purchases";
 
 import UpgradePopup from "../upgrade/UpgradePopup";
 import FeedbackForm from "../feedback/FeedbackForm";
@@ -21,6 +22,8 @@ const Settings = () => {
 
   const dataCtx = useContext(DataContext);
   const userProfile = dataCtx.userProfile;
+  const setUserProfile = dataCtx.setUserProfile;
+  const user = dataCtx.user;
   const navigation = useNavigation();
 
   const openUpgradePopup = () => {
@@ -54,6 +57,91 @@ const Settings = () => {
   const showFeedbackSuccessModal = () => setIsFeedbackSuccessModalOpen(true);
 
   const closeFeedbackSuccessModal = () => setIsFeedbackSuccessModalOpen(false);
+
+  const handleOpenURL = (url) => {
+    Linking.canOpenURL(url).then((supported) => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+      }
+    });
+  };
+
+  const restoringPurchases = async () => {
+    const restore = await Purchases.restorePurchases();
+    let isPremium = false;
+
+    if (restore.entitlements?.active?.premium) {
+      isPremium = true;
+      Alert.alert(
+        "Restore Purchase Success",
+        "You have successfully restored your purchase!",
+        [
+          {
+            text: "OK",
+            onPress: async () => {
+              if (userProfile && userProfile.subscription !== isPremium) {
+                setUserProfile((prevState) => {
+                  return {
+                    ...prevState,
+                    subscription: isPremium,
+                  };
+                });
+                await fetch(
+                  `https://birthdayai.herokuapp.com/api/users/${user.uid}/subscription`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${user.accessToken}`,
+                    },
+                    body: JSON.stringify({
+                      isSubscribed: isPremium,
+                    }),
+                  }
+                );
+              }
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert(
+        "Restore Purchase Failed",
+        "Unable to find previous purchase or an active subscription.",
+        [
+          {
+            text: "OK",
+            onPress: async () => {
+              if (userProfile && userProfile.subscription !== isPremium) {
+                setUserProfile((prevState) => {
+                  return {
+                    ...prevState,
+                    subscription: isPremium,
+                  };
+                });
+                await fetch(
+                  `https://birthdayai.herokuapp.com/api/users/${user.uid}/subscription`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${user.accessToken}`,
+                    },
+                    body: JSON.stringify({
+                      isSubscribed: isPremium,
+                    }),
+                  }
+                );
+              }
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
+  };
 
   return (
     <View style={styles.settingsContainer}>
@@ -122,6 +210,34 @@ const Settings = () => {
           >
             <SimpleLineIcons name="envelope-letter" size={30} color="#3f51b5" />
             <Text style={styles.settingTitle}>Feedback</Text>
+            <Text style={styles.arrowIcon}>➔</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={restoringPurchases}
+          >
+            <AntDesign name="creditcard" size={30} color="#3f51b5" />
+            <Text style={styles.settingTitle}>Restore Purchase</Text>
+            <Text style={styles.arrowIcon}>➔</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={() => handleOpenURL("https://birthdayaiapp.com/privacy")}
+          >
+            <AntDesign name="solution1" size={30} color="#3f51b5" />
+            <Text style={styles.settingTitle}>Privacy Policy</Text>
+            <Text style={styles.arrowIcon}>➔</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={() =>
+              handleOpenURL(
+                "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+              )
+            }
+          >
+            <AntDesign name="filetext1" size={30} color="#3f51b5" />
+            <Text style={styles.settingTitle}>Terms of Conditions</Text>
             <Text style={styles.arrowIcon}>➔</Text>
           </TouchableOpacity>
         </View>
