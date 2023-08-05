@@ -1,12 +1,12 @@
 import { useRef, useState, useContext } from "react";
 import { View, Image } from "react-native";
 import { Card } from "react-native-paper";
+import { signInWithPhoneNumber } from "@firebase/auth";
+import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 
 import PhoneSignIn from "./PhoneSignIn";
 import VerifyPhone from "./VerifyPhone";
 import { auth, app } from "../firebase/firebaseConfig";
-import { signInWithPhoneNumber } from "@firebase/auth";
-import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import ModalPopup from "../modal/ModalPopup";
 import LoadingModal from "../loading/LoadingModal";
 import DataContext from "../data/data-context";

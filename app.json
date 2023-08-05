@@ -2,7 +2,7 @@
   "expo": {
     "name": "BirthdayAI",
     "slug": "birthdayaiapp",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,7 +15,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.birthdayaiapp.BirthdayAI",
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.4",
+      "infoPlist": {
+        "NSContactsUsageDescription": "Allow BirthdayAI to access your contacts to import birthdays",
+        "NSCalendarsUsageDescription": "Allow BirthdayAI to access your calendar to import birthdays",
+        "NSRemindersUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +28,16 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.birthdayaiapp.BirthdayAI",
-      "versionCode": 2
+      "versionCode": 4,
+      "permissions": [
+        "android.permission.READ_CONTACTS",
+        "android.permission.WRITE_CONTACTS",
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ],
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -55,6 +69,12 @@
         }
       ]
     ],
-    "owner": "joshsalas"
+    "owner": "joshsalas",
+    "updates": {
+      "url": "https://u.expo.dev/f5aab79f-2d15-4cc6-b686-2cb5a62ccaa0"
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   }
 }

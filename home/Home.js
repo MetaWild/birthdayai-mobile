@@ -69,7 +69,7 @@ export default function Home() {
       <ModalPopup
         onClose={() => setSuccess(false)}
         title="Congratulations!"
-        content="You have successfully upgraded your account!"
+        content="You have successfully upgraded your account! Make sure to update past reminders to add the new features."
         isVisible={success}
       />
       <ModalPopup
@@ -190,11 +190,6 @@ export default function Home() {
             return <Other navigation={navigation} item={item} key={item.id} />;
           }
         })}
-        {!userProfile.subscription && (
-          <Text style={styles.aiUpgradeText}>
-            Add up to 5 reminders or upgrade to get more!
-          </Text>
-        )}
       </ScrollView>
     </View>
   );

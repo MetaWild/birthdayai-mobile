@@ -148,7 +148,7 @@ const Settings = () => {
       <ModalPopup
         onClose={closeSuccessModal}
         title="Congratulations!"
-        content="You have successfully upgraded your account!"
+        content="You have successfully upgraded your account! Make sure to update past reminders to add the new features."
         isVisible={isSuccessModalOpen}
       />
       <ModalPopup

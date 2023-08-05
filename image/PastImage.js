@@ -13,7 +13,6 @@ function PastImage(props) {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const dataCtx = useContext(DataContext);
-  const addToCardCount = dataCtx.addToCardCount;
 
   const openDelete = () => {
     setIsDeleteOpen(true);
@@ -60,7 +59,7 @@ function PastImage(props) {
       );
 
       const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status === "granted") {
+      if (status === "granted" && Platform.OS === "ios") {
         const result = await Share.share({
           url: localUri,
           title: "Share this image",
@@ -68,8 +67,10 @@ function PastImage(props) {
 
         if (result.action === Share.sharedAction) {
           alert("Image successfully shared!");
-          addToCardCount();
         }
+      } else if (status === "granted" && Platform.OS === "android") {
+        await MediaLibrary.saveToLibraryAsync(localUri);
+        alert("Image successfully saved!");
       } else {
         setIsSettingsModalOpen(true);
       }

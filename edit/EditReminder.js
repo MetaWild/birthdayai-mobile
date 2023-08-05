@@ -8,6 +8,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Button,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -64,6 +65,7 @@ function EditReminder({ route }) {
   const [content, setContent] = useState("");
   const [navigateHome, setNavigateHome] = useState(false);
   const [hasButton, setHasButton] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     if (didMount) {
@@ -157,6 +159,16 @@ function EditReminder({ route }) {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios"); // if it's iOS, keep the state as true
+    setDate(currentDate);
+  };
+
+  const showDatePicker = () => {
+    setShow(true);
   };
 
   function checkFormValidity() {
@@ -305,15 +317,33 @@ function EditReminder({ route }) {
 
           <Text style={styles.label}>Date:</Text>
           <View style={styles.input}>
-            <DateTimePicker
-              value={date}
-              mode={"date"}
-              display="default"
-              onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || date;
-                setDate(currentDate);
-              }}
-            />
+            {Platform.OS === "android" ? (
+              <>
+                <Button
+                  color="#3f51b5"
+                  onPress={showDatePicker}
+                  title="Show date picker!"
+                />
+                {show && (
+                  <DateTimePicker
+                    value={date}
+                    mode={"date"}
+                    display="default"
+                    onChange={onChange}
+                  />
+                )}
+              </>
+            ) : (
+              <DateTimePicker
+                value={date}
+                mode={"date"}
+                display="default"
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || date;
+                  setDate(currentDate);
+                }}
+              />
+            )}
           </View>
 
           {type === "Birthday" && (

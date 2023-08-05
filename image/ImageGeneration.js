@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   Share,
+  Platform,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
@@ -35,6 +36,7 @@ function ImageGeneration() {
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [imageLink, setImageLink] = useState("");
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
   const types = ["Birthday", "Anniversary", "Holiday"];
   const dataCtx = useContext(DataContext);
@@ -69,6 +71,10 @@ function ImageGeneration() {
   const showSuccessModal = () => setIsSuccessModalOpen(true);
 
   const closeSuccessModal = () => setIsSuccessModalOpen(false);
+
+  const showSettingsModal = () => setIsSettingsModalOpen(true);
+
+  const closeSettingsModal = () => setIsSettingsModalOpen(false);
 
   const openModal = (title, content, booleanButton = false, home = false) => {
     if (booleanButton !== hasButton) {
@@ -105,19 +111,19 @@ function ImageGeneration() {
 
   async function handleAddCard() {
     if (checkFormValidity()) {
-      if (!userProfile.subscription && userProfile.cards.length >= 0) {
+      if (!userProfile.subscription && userProfile.cards.length >= 3) {
         closeLoadingModal();
         openModal(
           "Upgrade Required",
-          "This is a premium feature. Please upgrade to generate cards.",
+          "You have reached your card limit. Please upgrade to add more cards.",
           true,
           false
         );
-      } else if (userProfile?.monthlyCardCount >= 15) {
+      } else if (userProfile?.monthlyCardCount >= 20) {
         closeLoadingModal();
         openModal(
           "Monthly Limit Reached",
-          "You have reached your monthly limit of 15 cards. Your limit will reset on the first of the month."
+          "You have reached your monthly limit of 20 cards. Your limit will reset on the first of the month."
         );
       } else {
         const newCard = {
@@ -182,7 +188,7 @@ function ImageGeneration() {
         });
       }
       const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status === "granted") {
+      if (status === "granted" && Platform.OS === "ios") {
         const result = await Share.share({
           url: localUri,
           title: "Share this image",
@@ -191,8 +197,11 @@ function ImageGeneration() {
         if (result.action === Share.sharedAction) {
           alert("Image successfully shared!");
         }
+      } else if (status === "granted" && Platform.OS === "android") {
+        await MediaLibrary.saveToLibraryAsync(localUri);
+        alert("Image successfully saved!");
       } else {
-        setIsSettingsModalOpen(true);
+        showSettingsModal();
       }
     } catch (error) {
       alert(error.message);
@@ -202,6 +211,13 @@ function ImageGeneration() {
   return (
     <>
       <LoadingModal isVisible={isLoading} onClose={closeLoadingModal} />
+      <ModalPopup
+        isVisible={isSettingsModalOpen}
+        onClose={closeSettingsModal}
+        title="Permission Denied"
+        content="Please enable access to the media library in your settings to save or share photos."
+        hasLinkToSettings={true}
+      />
       <PastGenerations
         isVisible={isPastGenerationModalOpen}
         onClose={closePastGenerationModal}

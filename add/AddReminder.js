@@ -50,6 +50,7 @@ function AddReminder() {
   const [calendarList, setCalendarList] = useState([]);
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
   const [csvList, setCsvList] = useState([]);
+  const [show, setShow] = useState(false);
 
   const navigation = useNavigation();
   const dataCtx = useContext(DataContext);
@@ -147,6 +148,16 @@ function AddReminder() {
 
   const closeSettingsModal = () => setIsSettingsModalOpen(false);
 
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios"); // if it's iOS, keep the state as true
+    setDate(currentDate);
+  };
+
+  const showDatePicker = () => {
+    setShow(true);
+  };
+
   const openModal = (title, content, booleanButton = false, home = false) => {
     if (booleanButton !== hasButton) {
       setHasButton(booleanButton);
@@ -206,7 +217,7 @@ function AddReminder() {
 
   async function handleAddReminder() {
     if (checkFormValidity()) {
-      if (!userProfile.subscription && userProfile.reminders.length >= 5) {
+      if (!userProfile.subscription && userProfile.reminders.length >= 10) {
         openModal(
           "Upgrade Required",
           "You have reached the maximum number of reminders. Please upgrade to add more reminders.",
@@ -262,8 +273,7 @@ function AddReminder() {
               true
             );
           })
-          .catch((error) => {
-          });
+          .catch((error) => {});
       }
     }
   }
@@ -386,8 +396,7 @@ function AddReminder() {
       } else {
         openModal("Import Error", "There was an error importing your file.");
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   }
 
   return (
@@ -525,7 +534,7 @@ function AddReminder() {
         <ModalPopup
           onClose={closeSuccessModal}
           title="Congratulations!"
-          content="You have successfully upgraded your account!"
+          content="You have successfully upgraded your account! Make sure to update past reminders to add the new features."
           isVisible={isSuccessModalOpen}
         />
         <UpgradePopup
@@ -609,15 +618,33 @@ function AddReminder() {
 
           <Text style={styles.label}>Date:</Text>
           <View style={styles.input}>
-            <DateTimePicker
-              value={date}
-              mode={"date"}
-              display="default"
-              onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || date;
-                setDate(currentDate);
-              }}
-            />
+            {Platform.OS === "android" ? (
+              <>
+                <Button
+                  color="#3f51b5"
+                  onPress={showDatePicker}
+                  title="Show date picker!"
+                />
+                {show && (
+                  <DateTimePicker
+                    value={date}
+                    mode={"date"}
+                    display="default"
+                    onChange={onChange}
+                  />
+                )}
+              </>
+            ) : (
+              <DateTimePicker
+                value={date}
+                mode={"date"}
+                display="default"
+                onChange={(event, selectedDate) => {
+                  const currentDate = selectedDate || date;
+                  setDate(currentDate);
+                }}
+              />
+            )}
           </View>
 
           {type === "Birthday" && (

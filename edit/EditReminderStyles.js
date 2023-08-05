@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     borderColor: "#dcdcdc",
     marginTop: 10,
     marginBottom: 30,
+    elevation: 5,
   },
   topPanel: {
     flexDirection: "row",
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     fontSize: 16,
+    elevation: 5,
     backgroundColor: "#fafafa",
   },
   picker: {
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     fontSize: 16,
+    elevation: 5,
     backgroundColor: "#fafafa",
   },
   sendButton: {

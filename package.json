@@ -40,7 +40,8 @@
     "react-native-svg": "13.4.0",
     "react-native-webview": "11.26.0",
     "react-navigation": "^4.4.4",
-    "expo-media-library": "~15.2.3"
+    "expo-media-library": "~15.2.3",
+    "expo-updates": "~0.16.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

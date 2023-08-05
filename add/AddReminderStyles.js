@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     borderColor: "#dcdcdc",
     marginTop: 10,
     marginBottom: 30,
+    elevation: 1,
   },
   topPanel: {
     flexDirection: "row",
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     fontSize: 16,
+    elevation: 5,
     backgroundColor: "#fafafa",
   },
 
@@ -88,6 +90,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     fontSize: 16,
+    elevation: 5,
     backgroundColor: "#fafafa",
   },
   sendButton: {
@@ -116,13 +119,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: "center",
     padding: 10,
     borderRadius: 4,
   },
   importButton: {
     backgroundColor: "#3f51b5",
     fontSize: 16,
-    width: 90,
+    width: 95,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

@@ -194,6 +194,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     fontSize: 16,
+    elevation: 5,
     backgroundColor: "#fafafa",
   },
   label: {
@@ -214,6 +215,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     fontSize: 16,
+    elevation: 5,
     backgroundColor: "#fafafa",
   },
 });
